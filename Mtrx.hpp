@@ -4,8 +4,6 @@
 #include "Mtrx.h"
 #include <random>
 #include <cassert>
-#include <cblas-openblas.h> // openblas size_terface of cblas
-
 
 template <class T>
 Mtrx<T>::Mtrx(const Mtrx<T>& A)
@@ -98,27 +96,6 @@ T Mtrx<T>::operator()(size_t i, size_t j) const
     return content[ncol*i + j];
 }
 
-template <class T>
-void rnd_load(Mtrx<T>& M)
-{
-  std::random_device rd;  //Will be used to obtain a seed for the random number engine
-  std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-  std::uniform_real_distribution<T> dis(0.0, 1.0);
-  for (size_t i = 0; i < M.nrow; i++)
-      for (size_t j = 0; j < M.ncol; j++)
-          M(i,j) = dis(gen);
-}
-
-template <class T>
-void rnd_load_int(Mtrx<float>& M)
-{
-  std::random_device rd;  //Will be used to obtain a seed for the random number engine
-  std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-  std::uniform_int_distribution<T> dis(0, 5);
-  for (size_t i = 0; i < M.nrow; i++)
-      for (size_t j = 0; j < M.ncol; j++)
-          M(i,j) = (float)dis(gen);
-}
 
 template <class T>
 void printM(const Mtrx<T>& M, const size_t I, const size_t J )
@@ -133,43 +110,7 @@ void printM(const Mtrx<T>& M, const size_t I, const size_t J )
     std::cout<<"\n";
 }
 
-template <class T>
-void rnd_load_int1(Mtrx<int>& M)
-{
-  std::random_device rd;  //Will be used to obtain a seed for the random number engine
-  std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-  std::uniform_int_distribution<T> dis(0, 5);
-  for (size_t i = 0; i < M.nrow; i++)
-      for (size_t j = 0; j < M.ncol; j++)
-          M(i,j) = dis(gen);
-}
-/*
-template <>
-void mult(Mtrx<double>& A, Mtrx<double>& B, Mtrx<double>& C)
-{
 
-    auto Ar = static_cast<blasint>(A.nrow);
-    auto Ac = static_cast<blasint>(A.ncol);
-    auto Br = static_cast<blasint>(B.nrow);
-    auto Bc = static_cast<blasint>(B.ncol);
-
-
-    cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, Ar, Bc, Br, 1.0,
-                A.get_data(), Ac, B.get_data(), Bc, 0.0, C.get_data(), Bc);
-}
-
-template <>
-void mult(Mtrx<float>& A, Mtrx<float>& B, Mtrx<float>& C)
-{
-    auto Ar = static_cast<blasint>(A.nrow);
-    auto Ac = static_cast<blasint>(A.ncol);
-    auto Br = static_cast<blasint>(B.nrow);
-    auto Bc = static_cast<blasint>(B.ncol);
-    cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, Ar, Bc, Br, 1.0,
-                A.get_data(), Ac, B.get_data(), Bc, 0.0, C.get_data(), Bc);
-}
-
-*/
 #endif // MTRX_HPP
 
 
