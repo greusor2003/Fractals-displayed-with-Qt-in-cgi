@@ -27,10 +27,5 @@ struct Mtrx
     T* content;
 };
 
-template<class T>
-void mult(Mtrx<T>&, Mtrx<T>&, Mtrx<T>&);
-
-template<class T>
-Mtrx<T> operator * (Mtrx<T>&, Mtrx<T>&);
 
 #endif // MTRX_H
