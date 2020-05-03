@@ -63,25 +63,6 @@ Mtrx<T>& Mtrx<T>::operator = (Mtrx<T>&& A)
 }
 
 
-template<class T>
-Mtrx<T>& Mtrx<T>::operator *= (Mtrx<T>& B)
-{
-    assert(ncol == B.nrow);
-    Mtrx<T> temp(nrow, B.ncol);
-    mult<T>(*this, B, temp);
-    *this = temp;
-    return *this;
-}
-
-template<class T>
-Mtrx<T> operator * (Mtrx<T>& A, Mtrx<T>& B)
-{
-    assert(A.ncol == B.nrow);
-    Mtrx<T> temp(A.nrow, B.ncol);
-    mult<T>(A, B, temp);
-    return temp;
-}
-
 template <class T>
 T& Mtrx<T>::operator()(size_t i, size_t j)
 {
