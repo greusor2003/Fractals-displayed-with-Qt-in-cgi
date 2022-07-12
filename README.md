@@ -7,7 +7,7 @@ The complexity of the GUI and graphic engine API's that interact directly with s
 The Julia set is generated as a matrix of complex numbers using the matrix class defined in Mtrx.cpp. 
 
 To compile, please load the project Juliaset.pro in Qt Creator, build and run.
-The compiled file can be placed in the cgi-bin of the server so that the image can be generated directly into the browser and thus interacting with it remotely.
+The compiled file can be placed in the cgi-bin of the server so that the image can be generated directly into the browser and thus interacting with it remotely via form_cgi.html.
 
 Juliaset is an already available executable binary.
 
