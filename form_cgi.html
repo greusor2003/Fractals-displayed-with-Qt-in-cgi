@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Form With CGI
+    </title>
+</head>
+
+<body>
+
+<h2>Image object loaded into container</h2>
+<div id="container"></div>
+
+<div align="next">
+<div>
+    <input type="range" onchange="loadVals()" min="0" max="100" value="0" class="slider" id="myRange">
+    <p>Zoom level: <span id="demo"></span></p>
+</div>
+
+<div>
+    <input type="number" onchange="loadVals()" min="-1.6" max="0.8" value="-0.74" step="0.000001" class="slider" id="myRangex">
+</div>
+
+<div>
+    <input type="number" onchange="loadVals()" min="-1.2" max="1.2" value="0.12" step="0.000001" class="slider" id="myRangey">
+</div>
+<p><span>c=</span><span id="demo1"></span></p>
+<div>
+    <button id="btn" onclick="makeImage">Load Julia Set</button>
+</div>
+</div>
+
+<h2>Image object loaded to canvas' size</h2>
+<div><p>Click the point on the image you'd like to be in the center green spot of the canvas, then zoom in.</p>
+    <p>At higher resolutions, to be accurate, bring the desired spot to the center by clicking on points closer to the center on an imaginary line from the center to the spot.</p></div>
+
+<canvas id="myCanvas" height="600" width="800">
+</canvas>
+<script>
+var slider = document.getElementById("myRange");
+var slider1 = document.getElementById("myRangex");
+var slider2 = document.getElementById("myRangey");
+var output = document.getElementById("demo");
+var outc = document.getElementById("demo1");
+var container = document.getElementById("container");
+const canvas = document.getElementById("myCanvas");
+          
+const a = 2.0;
+const b = 1.6;
+const zs = 0.86;
+var re = 0.0; im = 0.0; // new image center from mouse coordinates
+
+var image = new Image();
+image.width = '480';
+image.height = '360';
+image.src = "";
+image.alt='Loading...';
+container.appendChild(image);
+
+output.innerHTML = slider.value+" (original size)";
+outc.innerHTML = slider1.value+"+"+slider2.value+"i";
+
+document.getElementById("btn").onclick=makeImage;
+
+function loadVals()
+//called when input changes
+{
+        output.innerHTML = slider.value+" ("+(1/Math.pow(zs,slider.value)).toFixed(2)+" times)";
+        outc.innerHTML = slider1.value+"+"+slider2.value+"i";
+};
+
+function makeImage()
+{
+        loadVals();
+        var url = "cgi-bin/Juliaset?";
+        url += ("re="+re+"&im="+im+"&Q="+ slider.value+"&x="+slider1.value+"&y="+slider2.value);
+        image.src = url;
+        Test1(image);
+};
+
+//draw image img on canvas
+function Test1(img) {
+    if (canvas.getContext) {
+        ctx = canvas.getContext('2d');       
+        img.onload = function()
+        {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "rgb(0, 255, 0, 0.6)";
+            ctx.beginPath();
+            ctx.arc(canvas.width/2, canvas.height/2, 8, 0, 2 * Math.PI);
+            ctx.closePath();
+            ctx.fill();
+        };
+    };
+};
+
+function getMousePosition(canvas, event) 
+{
+    let rect = canvas.getBoundingClientRect();
+    let x = event.clientX - rect.left;
+    let y = event.clientY - rect.top;
+    var p = Math.pow(zs, slider.value);
+     re += (2*x/canvas.width-1)*a*p;
+     im += (1-2*y/canvas.height)*b*p;
+     makeImage();
+         
+ }
+
+canvas.addEventListener("mousedown", function(e)
+{
+     getMousePosition(canvas, e);
+});
+</script>
+
+</body>
+</html>
